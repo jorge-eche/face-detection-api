@@ -1,8 +1,10 @@
 import express from "express";
+import cors from "cors";
 
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 
 const database = {
   users: [
@@ -86,11 +88,3 @@ app.put("/image", (req, res) => {
 app.listen(3000, () => {
   console.log("app is running on port 3000");
 });
-
-/*
-/ --> res = this is working
-/signin --> POST  = success/fail
-/signin --> POST  = user
-/profile/:userid --> GET = user
-/image --> PUT --> user
-*/
