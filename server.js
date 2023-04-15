@@ -2,18 +2,16 @@ import express from "express";
 import cors from "cors";
 import knex from "knex";
 
-knex({
+const db = knex({
   client: "pg",
   connection: {
     host: "127.0.0.1",
-    port: 3306,
+    port: 5432,
     user: "postgres",
-    password: "",
+    password: "test1",
     database: "smart-brain",
   },
 });
-
-// knex.select("*").from("users");
 
 const app = express();
 
@@ -58,15 +56,17 @@ app.post("/signin", (req, res) => {
 
 app.post("/register", (req, res) => {
   const { name, email } = req.body;
-  database.users.push({
-    id: "125",
-    name: name,
-    email: email,
-    entries: 0,
-    joined: new Date(),
-  });
-
-  res.json(database.users[database.users.length - 1]);
+  db("users")
+    .returning("*")
+    .insert({
+      name: name,
+      email: email,
+      joined: new Date(),
+    })
+    .then((user) => {
+      res.json(user[0]);
+    })
+    .catch((err) => res.status(400).json("unable to register"));
 });
 
 app.get("/profile/:id", (req, res) => {
