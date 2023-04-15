@@ -1,5 +1,19 @@
 import express from "express";
 import cors from "cors";
+import knex from "knex";
+
+knex({
+  client: "pg",
+  connection: {
+    host: "127.0.0.1",
+    port: 3306,
+    user: "postgres",
+    password: "",
+    database: "smart-brain",
+  },
+});
+
+// knex.select("*").from("users");
 
 const app = express();
 
