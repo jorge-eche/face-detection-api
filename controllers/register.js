@@ -1,6 +1,11 @@
 export const handleRegister = (req, res, db, bcrypt) => {
   const { name, email, password } = req.body;
 
+  //Form validation.
+  if (!name || !email || !password) {
+    return res.status(400).json("incorrect form submission");
+  }
+
   //Hash password with bcryptjs.
   var salt = bcrypt.genSaltSync(10);
   var hash = bcrypt.hashSync(password, salt);
@@ -15,7 +20,6 @@ export const handleRegister = (req, res, db, bcrypt) => {
       .into("login")
       .returning("email")
       .then((loginEmail) => {
-        console.log(loginEmail);
         trx("users")
           .returning("*")
           .insert({
