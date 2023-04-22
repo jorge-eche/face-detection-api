@@ -4,7 +4,7 @@ import knex from "knex";
 import bcrypt from "bcryptjs";
 import { handleRegister } from "./controllers/register.js";
 import { handleSignIn } from "./controllers/signin.js";
-import { handleImage } from "./controllers/image.js";
+import { handleImage, handleApiCall } from "./controllers/image.js";
 
 const db = knex({
   client: "pg",
@@ -36,6 +36,11 @@ app.post("/register", (req, res) => {
 
 app.get("/profile/:id", (req, res) => {
   handleProfileGet(req, res, db);
+});
+
+// Fetches Clarifai API
+app.post("/imageurl", (req, res) => {
+  handleApiCall(req, res);
 });
 
 //updates the entries and increases the count
