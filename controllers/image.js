@@ -1,52 +1,44 @@
+//Construct the Clarifai stub, which contains all the methods available in the Clarifai API, and the Metadata object that's used to authenticate:
+import { ClarifaiStub, grpc } from "clarifai-nodejs-grpc";
+
+const stub = ClarifaiStub.grpc();
+
+const metadata = new grpc.Metadata();
+//Set your own Clarifai API Key number in the second parameter!
+metadata.set("authorization", "Key ee04e5fe2b054b399c558733158aba2b");
+
 export const handleApiCall = (req, res) => {
-  const returnClarifaiRequestOptions = (imageURL) => {
-    console.log("imageURL", imageURL);
-    // Your PAT (Personal Access Token) can be found in the portal under Authentification
-    const PAT = "100d7e616b544154a64cf0c855c3ce67";
-    // Specify the correct user_id/app_id pairings
-    // Since you're making inferences outside your app's scope
-    const USER_ID = "jecheverria";
-    const APP_ID = "SmartBrainAus";
-    // Change these to whatever model and image URL you want to use
-    const MODEL_ID = "face-detection";
-    const IMAGE_URL = imageURL;
+  //Predicts concepts in an image.
+  stub.PostModelOutputs(
+    {
+      // This is the model ID of a publicly available Face Detection Model. You may use any other public or custom model ID.
+      model_id: "face-detection",
+      inputs: [{ data: { image: { url: req.body.input } } }],
+    },
+    metadata,
+    (err, response) => {
+      if (err) {
+        console.log("Error: " + err);
+        return;
+      }
 
-    const raw = JSON.stringify({
-      user_app_id: {
-        user_id: USER_ID,
-        app_id: APP_ID,
-      },
-      inputs: [
-        {
-          data: {
-            image: {
-              url: IMAGE_URL,
-            },
-          },
-        },
-      ],
-    });
+      if (response.status.code !== 10000) {
+        console.log(
+          "Received failed status: " +
+            response.status.description +
+            "\n" +
+            response.status.details
+        );
+        return;
+      }
 
-    const requestOptions = {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Key " + PAT,
-      },
-      body: raw,
-    };
-
-    return requestOptions;
-  };
-
-  fetch(
-    "https://api.clarifai.com/v2/models/" + "face-detection" + "/outputs",
-    returnClarifaiRequestOptions(req.body.input)
-  )
-    .then((response) => response.json())
-    .then((data) => {
-      res.json(data);
-    });
+      console.log("Predicted concepts, with confidence values:");
+      for (const c of response.outputs[0].data.concepts) {
+        console.log(c.name + ": " + c.value);
+      }
+      res.json(response);
+    }
+  );
 };
 
 export const handleImage = (req, res, db) => {
