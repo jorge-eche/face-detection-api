@@ -12,7 +12,7 @@ const db = knex({
     host: process.env.DATABASE_HOST,
     port: 5432,
     user: "postgres",
-    password: process.env.DATABASE_PASSWORD,
+    password: process.env.DATAAPI_CLARIFAIBASE_PASSWORD,
     database: process.env.DATABASE_DB,
   },
 });
@@ -48,6 +48,6 @@ app.put("/image", (req, res) => {
   handleImage(req, res, db);
 });
 
-app.listen(3000, () => {
-  console.log("app is running on port 3000");
+app.listen(process.env.PORT, () => {
+  console.log(`app is running on port ${process.env.PORT}`);
 });
