@@ -5,7 +5,7 @@ const stub = ClarifaiStub.grpc();
 
 const metadata = new grpc.Metadata();
 //Set your own Clarifai API Key number in the second parameter!
-metadata.set("authorization", `Key ${process.env.API_CLARIFAI}`);
+metadata.set("authorization", `Key ${process.env.API_CLARIFAI_KEY}`);
 
 export const handleApiCall = (req, res) => {
   //Predicts concepts in an image.
