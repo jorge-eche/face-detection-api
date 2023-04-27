@@ -6,6 +6,7 @@ import { handleRegister } from "./controllers/register.js";
 import { handleSignIn } from "./controllers/signin.js";
 import { handleImage, handleApiCall } from "./controllers/image.js";
 
+//Add your own environmental variables.
 const db = knex({
   client: "pg",
   connection: {
