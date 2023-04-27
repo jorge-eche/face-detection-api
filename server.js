@@ -12,7 +12,7 @@ const db = knex({
     host: process.env.DATABASE_HOST,
     port: 5432,
     user: "postgres",
-    password: process.env.DATAAPI_CLARIFAIBASE_PASSWORD,
+    password: process.env.DATABASE_PASSWORD,
     database: process.env.DATABASE_DB,
   },
 });
