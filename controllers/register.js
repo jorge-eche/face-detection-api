@@ -19,7 +19,7 @@ export const handleRegister = (req, res, db, bcrypt) => {
       .into("login")
       .returning("email")
       .then((loginEmail) => {
-        trx("users")
+        return trx("users")
           .returning("*")
           .insert({
             name: name,
