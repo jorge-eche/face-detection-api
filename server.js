@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import knex from "knex";
 import bcrypt from "bcryptjs";
+import logger from "./logging/logger.js";
 import { handleRegister } from "./controllers/register.js";
 import { handleSignIn } from "./controllers/signin.js";
 import { handleImage, handleApiCall } from "./controllers/image.js";
@@ -10,13 +11,17 @@ import { handleImage, handleApiCall } from "./controllers/image.js";
 const db = knex({
   client: "pg",
   connection: {
-    host: "my-db-instance.cblowphqbzn4.ap-southeast-2.rds.amazonaws.com",
+    host: process.env.DATABASE_HOST,
     port: 5432,
     user: "postgres",
-    password: "keppe123",
-    database: "initial_db",
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_DB,
   },
 });
+
+logger.info(process.env.DATABASE_HOST);
+logger.info(process.env.DATABASE_PASSWORD);
+logger.info(process.env.DATABASE_DB);
 
 const app = express();
 
