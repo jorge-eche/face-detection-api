@@ -3,7 +3,7 @@ import cors from "cors";
 import knex from "knex";
 import bcrypt from "bcryptjs";
 import logger from "./logging/logger.js";
-import { handleRegister } from "./controllers/register.js";
+import registerController from "./controllers/register.js";
 import { handleSignIn } from "./controllers/signin.js";
 import { handleImage, handleApiCall } from "./controllers/image.js";
 
@@ -37,7 +37,7 @@ app.post("/signin", (req, res) => {
 });
 
 app.post("/register", (req, res) => {
-  handleRegister(req, res, db, bcrypt);
+  registerController(logger).handleRegister(req, res, db, bcrypt);
 });
 
 app.get("/profile/:id", (req, res) => {
