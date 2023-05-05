@@ -4,8 +4,9 @@ import knex from "knex";
 import bcrypt from "bcryptjs";
 import logger from "./logging/logger.js";
 import registerController from "./controllers/register.js";
+import userController from "./controllers/userController.js";
+import clarifaiController from "./controllers/image.js";
 import { handleSignIn } from "./controllers/signin.js";
-import { handleImage, handleApiCall } from "./controllers/image.js";
 
 //Add your own environmental variables.
 const db = knex({
@@ -46,12 +47,12 @@ app.get("/profile/:id", (req, res) => {
 
 // Fetches Clarifai API
 app.post("/imageurl", (req, res) => {
-  handleApiCall(req, res);
+  clarifaiController(logger).handleApiCall(req, res);
 });
 
 //updates the entries and increases the count
 app.put("/image", (req, res) => {
-  handleImage(req, res, db);
+  userController(logger).addEntriesToUser(req, res, db);
 });
 
 app.listen(process.env.PORT, () => {
