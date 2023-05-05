@@ -1,3 +1,5 @@
+import logger from "../logging/logger";
+
 export const handleRegister = (req, res, db, bcrypt) => {
   const { name, email, password } = req.body;
 
@@ -19,6 +21,7 @@ export const handleRegister = (req, res, db, bcrypt) => {
       .into("login")
       .returning("email")
       .then((loginEmail) => {
+        logger.info(`esto es loginEmail ${loginEmail}`);
         return trx("users").returning("*").insert({
           name: name,
           email: loginEmail[0].email,
@@ -27,9 +30,18 @@ export const handleRegister = (req, res, db, bcrypt) => {
         // .then((user) => res.json(user[0]));
       })
       .then((user) => {
+        logger.info(`antes de trx.commit ${user}`);
         trx.commit();
         res.json(user[0]);
+        logger.info(`despues de trx.commit ${user[0]}`);
       })
-      .catch(() => trx.rollback());
-  }).catch((err) => res.status(400).json("unable to register"));
+      .catch((err) => {
+        logger.info(`entered catch rollback`);
+        logger.error(err);
+        trx.rollback();
+      });
+  }).catch((err) => {
+    logger.error(err);
+    res.status(400).json("unable to register");
+  });
 };
