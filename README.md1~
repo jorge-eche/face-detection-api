@@ -1,1 +1,5 @@
-# face-detection-api
+# Face-Recognition API Server.
+
+Server for my Fullstack PERN app that recognizes faces on images uploaded by the user.
+For more information about the project you can check the Frontend's source code on Github at: [Face-Detection App](https://github.com/jorge-eche/face-detection-app/tree/main)
+or its Live Site URL at: [Face Recognition App Live](https://smartbrain-edxx.onrender.com/)
